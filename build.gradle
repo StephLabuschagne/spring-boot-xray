@@ -1,0 +1,95 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+plugins {
+    id 'org.springframework.boot' version '2.2.2.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id "io.freefair.lombok" version "4.1.6"
+    id 'java'
+    id 'com.adarshr.test-logger' version '2.0.0'
+    id 'jacoco'
+}
+
+group = 'com.test'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    integration {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+        java {
+            srcDirs("src/integration")
+        }
+    }
+}
+
+configurations {
+    integrationImplementation.extendsFrom(testImplementation)
+    integrationRuntimeOnly.extendsFrom(testRuntimeOnly)
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:2.1.2.RELEASE'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.junit-pioneer:junit-pioneer:1.7.1'
+    testImplementation 'com.jayway.restassured:rest-assured:2.8.0'
+
+    integrationImplementation 'org.springframework.boot:spring-boot-starter-test'
+    integrationImplementation 'org.junit-pioneer:junit-pioneer:1.7.1'
+    integrationImplementation 'com.jayway.restassured:rest-assured:2.8.0'
+}
+
+jacoco {
+    toolVersion = "0.8.5"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled true
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}
+
+
+
+task printSourceSetInformation(){
+
+    doLast{
+        sourceSets.each { srcSet ->
+            println "["+srcSet.name+"]"
+            print "-->Source directories: "+srcSet.allJava.srcDirs+"\n"
+            print "-->Output directories: "+srcSet.output.classesDirs.files+"\n"
+            print "-->Compile classpath:\n"
+            srcSet.compileClasspath.files.each {
+                print "  "+it.path+"\n"
+            }
+            println ""
+        }
+    }
+}
+
+task integration(type: Test) {
+    description = "Run integration tests"
+    group = "verification"
+    testClassesDirs = sourceSets.integration.output.classesDirs
+    classpath = sourceSets.integration.runtimeClasspath
+}
+
+tasks.withType(Test).configureEach {
+    // Using JUnitPlatform for running tests
+    useJUnitPlatform()
+}
