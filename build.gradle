@@ -44,13 +44,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-aop:2.5.2'
 
     implementation 'com.amazonaws:aws-xray-recorder-sdk-core'
-    implementation 'com.amazonaws:aws-xray-recorder-sdk-aws-sdk'
+//    implementation 'com.amazonaws:aws-xray-recorder-sdk-aws-sdk'
 //    implementation 'com.amazonaws:aws-xray-recorder-sdk-aws-sdk-instrumentor'
 //    implementation 'com.amazonaws:aws-xray-recorder-sdk-apache-http'
 //    implementation 'com.amazonaws:aws-xray-recorder-sdk-sql-postgres'
 //    implementation 'com.amazonaws:aws-xray-recorder-sdk-sql-mysql'
     implementation 'com.amazonaws:aws-xray-recorder-sdk-spring:2.11.0'
-    implementation 'com.amazonaws:aws-java-sdk-xray'
     implementation 'com.amazonaws:aws-java-sdk-core:1.11.662'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
