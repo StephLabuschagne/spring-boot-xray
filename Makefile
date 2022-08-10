@@ -13,6 +13,15 @@ docker: compile
 	docker tag build-status roioteromorales/build-status:latest && \
 	docker push roioteromorales/build-status:latest
 
+xray_build:
+	docker pull amazon/aws-xray-daemon:3.x
+
+xray_run:
+	docker run --rm -it --attach STDOUT -v ~/.aws/:/root/.aws/:ro -e AWS_REGION=us-east-2 --name xray-daemon -p 2000:2000 xray-daemon
+
+xray_remove:
+	docker stop xray-daemon && \
+    docker rm xray-daemon
 
 #SHELL := /bin/bash
 
