@@ -1,5 +1,6 @@
 package com.test.api;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.test.dto.Response;
 import com.test.service.BuildService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
+@XRayEnabled
 @RestController()
 @RequiredArgsConstructor
 public class Controller {
