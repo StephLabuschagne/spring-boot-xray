@@ -17,7 +17,7 @@ jobs:
       - run: make integration
   docker-image:
     if: ${{ success() }}
-    needs: [ unit-test, integration-test ]
+    needs: [ integration-test ]
     runs-on: ubuntu-latest
     steps:
       - run: echo "build docker image"
