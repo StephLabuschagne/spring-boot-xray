@@ -1,0 +1,55 @@
+name: dev
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: make compile
+  integration-test:
+    if: ${{ success() }}
+    needs: [ build ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: make integration
+  docker-image:
+    if: ${{ success() }}
+    needs: [ unit-test, integration-test ]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "build docker image"
+  contract-test:
+    if: ${{ success() }}
+    needs: [docker-image]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "contract-testing"
+  sonarcloud-test:
+    if: ${{ success() }}
+    needs: [docker-image]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "sonarcloud"
+  terraform:
+    if: ${{ success() }}
+    needs: [contract-test,sonarcloud-test]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "terraform"
+  deploy:
+    if: ${{ success() }}
+    needs: terraform
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "deploy"
+  smoke-test:
+    if: ${{ success() }}
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "smoke-test"

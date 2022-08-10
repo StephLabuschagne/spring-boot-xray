@@ -8,6 +8,10 @@ unit:
 	chmod +x ./gradlew
 	./gradlew clean test
 
+integration:
+	chmod +x ./gradlew
+	./gradlew clean integration
+
 docker: compile
 	docker build -t build-status . && \
 	docker tag build-status roioteromorales/build-status:latest && \
